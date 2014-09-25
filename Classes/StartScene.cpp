@@ -1,4 +1,5 @@
 #include "StartScene.h"
+#include "GameMainScene.h"
 #include "SimpleAudioEngine.h"
 
 
@@ -25,15 +26,17 @@ bool StartScene::init()
 
 	//CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("other/menuMusic.mp3", true);
 
-	Size winSize = Director::getInstance()->getWinSize();
+	//Size winSize = Director::getInstance()->getWinSize();
+	Size visualSize = Director::getInstance()->getVisibleSize();
+	Vec2 visualBoarder = Director::getInstance()->getVisibleOrigin();
 
 	auto backgroundImg = Sprite::create("StartSceneBg.png");
-	backgroundImg->setPosition(Vec2(winSize.width/2, winSize.height/2));
+	backgroundImg->setPosition(Vec2(visualSize.width / 2 + visualBoarder.x, visualSize.height / 2 + visualBoarder.y));
 	this->addChild(backgroundImg);
 
-	auto menuPlayLabel = LabelTTF::create("Play", "Helvetica-Bold", 60);
+	auto menuPlayLabel = Label::create("Play", "Helvetica-Bold", 60);
 	auto menuPlay = MenuItemLabel::create(menuPlayLabel, CC_CALLBACK_1(StartScene::playIsPressed, this));
-	menuPlay->setPosition(ccp(0, 220));
+	menuPlay->setPosition(Vec2(visualSize.width / 2, 220));
 
 	auto menu = Menu::create(menuPlay, NULL);
 	this->addChild(menu);
@@ -52,5 +55,5 @@ StartScene::~StartScene()
 
 void StartScene::playIsPressed(Ref* sender)
 {
-	//Director::getInstance()->replaceScene(CCTransitionSplitRows::create(1.5, World::scene()));
+	Director::getInstance()->replaceScene(TransitionSplitRows::create(1.5, MainScene::createScene()));
 }
